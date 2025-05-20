@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 
+import loginPage from "../support/page_objects/login.page";
 import produtosPage from "../support/page_objects/produtos.page";
 
 
@@ -16,19 +17,21 @@ context('Exercicio - Testes End-to-end - Fluxo de pedido', () => {
 -E validando minha compra ao final */
 
 beforeEach(() => {
-    produtosPage.fazerLogin()
-    produtosPage.visitarProdutos()
+    loginPage.fazerLogin()
+    cy.get('.woocommerce-MyAccount-navigation-link--customer-logout > a')
+    .should('be.visible')
+    .and('contain', 'Sair');
+    
 
 });
 
   //Teste feito com Page Objects
 it('Deve fazer um pedido na loja Ebac Shop de ponta a ponta', () => {
-
     let qtd = 4
+    produtosPage.visitarProdutos()
     produtosPage.buscarProdutoNoSearch('Apollo Running Short')
     produtosPage.addProdutoCarrinho(36,'Black', qtd)
     cy.get('.woocommerce-message').should('contain', qtd + ' × “Apollo Running Short” foram adicionados no seu carrinho.')
-
     })
 
 
